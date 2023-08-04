@@ -38,4 +38,27 @@ const userSchema = new Schema({
     }
 })
 
-export default mongoose.model('User', userSchema)
+const PostSchema = new Schema({
+    title:{
+        type: String,
+        required: true
+    },
+    body:{
+        type: String,
+        required: true
+    },
+    createdAt:{
+        type: Date,
+        default: Date.now()
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now()
+    },
+    videoPath:{
+        type: String
+    }
+})
+
+export const User =  mongoose.model('User', userSchema)
+export const Post = mongoose.model('Post', PostSchema)

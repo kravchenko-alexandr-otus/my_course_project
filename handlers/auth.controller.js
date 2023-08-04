@@ -1,10 +1,9 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-import User from '../models/user.js'
+import {User} from '../models/models.js'
 import 'dotenv/config'
 
 export const signup = (req,res) => {
-    console.log("PASSWORD", req.body.password)
     const user = new User({
         username: req.body.username,
         email: req.body.email,
@@ -31,15 +30,16 @@ export const signin = (req,res) => {
         email: req.body.email
     }).then( user =>{
         //Comparing passwords
+        try{
         var passwordIsValid = bcrypt.compareSync(
             req.body.password,
             user.password
-        )
+        )}
+        catch {
+            return res.render('login_page', {message: 'Wrong EMAIL or PASSWORD'})
+        }
         if (!passwordIsValid) {
-            return res.status(401).send({
-                accessToken: null,
-                message: "Invalid Password!"
-            })
+            return res.render('login_page', {message: 'Wrong EMAIL or PASSWORD'})
         }
         //Signing token with user id
         var token = jwt.sign({

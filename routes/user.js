@@ -1,5 +1,5 @@
 import express from 'express'
-import { login, signup, signin } from '../handlebars/auth.controller.js'
+import { login, signup, signin } from '../handlers/auth.controller.js'
 
 var router = express.Router()
 
