@@ -1,0 +1,14 @@
+{{#section 'head'}}
+<link rel="stylesheet" href="css/courses.css">
+{{/section}}
+
+<strong>Best Courses In The World</strong>
+
+<ol class="alternating-colors">
+    {{#each courses}}
+  <li>
+    <a href="courses/{{this._id}}/lessons"><strong>{{this.title}}</strong></a>
+    <p>{{this.description}}</p>
+  </li>
+    {{/each}}
+</ol>

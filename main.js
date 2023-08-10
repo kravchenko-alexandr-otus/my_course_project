@@ -9,14 +9,12 @@ import * as handlers from './handlers/handlers.js'
 import userRoutes from './routes/user.js'
 import renders from './routes/renders.js'
 
-import {fileURLToPath} from 'url'
-import { dirname } from 'path'
+import {__dirname} from './config.js'
 import multer from 'multer'
 import path from 'path'
 import verifyToken from './handlers/authJWT.js'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+
 
 const app = express()
 
@@ -25,15 +23,17 @@ const storage = multer.diskStorage({
         cb(null, './public/uploads')
     },
     filename: function(req, file, cb){
-        cb(null, Date.now() + '-' + file.originalname)
+        file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf-8')
+        cb(null, file.originalname)
     },
 })
 const upload = multer({storage:storage})
 
 try {
     mongoose.connect('mongodb://localhost:27017/course_project', {
+        useNewUrlParser: true,
         useUnifiedTopology: true,
-        useNewUrlParser: true
+        autoIndex: true,
     })
     console.log('Successfully connected to db')
 } catch (error){
@@ -63,20 +63,15 @@ app.use(express.static(__dirname + '/public'))
 
 
 
-app.get('/courses', verifyToken, handlers.course)
-
 app.get('/signIn', handlers.login)
 
 app.get('/logout', handlers.logout)
 
 app.get('/profile/:username', handlers.profile)
 
-app.get('/create_post', handlers.create_post)
+app.post('/upload_data/:id', upload.single('my-video'), handlers.upload_data)
 
-app.post('/upload_data', upload.single('my-video'), (req, res) =>{
-    console.log(`Video uploaded: ${req.file.filename}`)
-})
-
+app.post('/upload_course', handlers.upload_course)
 
 // TODO: 
 // 1) Complete create_post.handlers
@@ -114,4 +109,4 @@ const port = process.env.PORT || 3000
 
 
 
-app.listen(port, () => console.log(__dirname))
+app.listen(port, () => console.log(`SERVER is up listening on port: ${port}`))

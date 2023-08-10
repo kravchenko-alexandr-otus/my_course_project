@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose, { Mongoose } from "mongoose"
 
 const Schema = mongoose.Schema
 
@@ -38,7 +38,7 @@ const userSchema = new Schema({
     }
 })
 
-const PostSchema = new Schema({
+const LessonSchema = new Schema({
     title:{
         type: String,
         required: true
@@ -57,8 +57,56 @@ const PostSchema = new Schema({
     },
     videoPath:{
         type: String
+    },
+    otherFiles: {
+        type: String
+    },
+    owner: {
+        type: String
+    },
+    accordingToCourse:{
+        type: mongoose.Types.ObjectId,
+        required: true
+    }
+})
+
+const CommentsSchema = new Schema({
+    username:{
+        type: String,
+        required: true
+    },
+    createdAt:{
+        type: Date,
+        default: Date.now()
+    },
+    body:{
+        type: String,
+        required: true
+    },
+    lessonId:{
+        type: mongoose.Types.ObjectId
+    }
+})
+
+const CourseSchema = new Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    owner: {
+        type:String,
+        required:true
+    },
+    allowedTo:{
+        type:[String]
     }
 })
 
 export const User =  mongoose.model('User', userSchema)
-export const Post = mongoose.model('Post', PostSchema)
+export const Lesson = mongoose.model('Lesson', LessonSchema)
+export const Comment = mongoose.model('comment', CommentsSchema)
+export const Course = mongoose.model('course', CourseSchema)

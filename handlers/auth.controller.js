@@ -51,7 +51,8 @@ export const signin = (req,res) => {
         res.cookie('access_token', token, {
             maxage: 86400*1000
         })
-        res.redirect('/teachers')
+        res.cookie('username', user.username)
+        res.redirect(`/profile/${user.username}`)
     }).catch(err => console.log(err))
 }
 
