@@ -20,11 +20,6 @@ export const signup = (req,res) => {
             console.log(err)})
 }
 
-export const login = (req,res) =>{
-    res.render('login_page', {layout:'login'})
-}
-
-
 export const signin = (req,res) => {
     User.findOne({
         email: req.body.email
