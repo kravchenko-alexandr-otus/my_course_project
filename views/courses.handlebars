@@ -3,12 +3,19 @@
 {{/section}}
 
 <strong>Best Courses In The World</strong>
-
+<h2 style="color:blueviolet">{{message}}</h2>
 <ol class="alternating-colors">
     {{#each courses}}
   <li>
     <a href="courses/{{this._id}}/lessons"><strong>{{this.title}}</strong></a>
     <p>{{this.description}}</p>
+    <h5>LESSONS:</h5>
+    <ol class="alternating-colors">
+    {{#each lessons}}
+        <li>{{title}}</li>
+        <p>{{description}}</p>
+    {{/each}}
+    </ol>
   </li>
     {{/each}}
 </ol>

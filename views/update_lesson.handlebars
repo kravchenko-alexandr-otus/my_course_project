@@ -1,4 +1,6 @@
-    {{!-- {{#section 'head'}}
+<!DOCTYPE html>
+<html lang="en">
+    {{#section 'head'}}
     <style>
         textarea{
             font-size:20px;
@@ -17,19 +19,16 @@
                  
         
     </style>
-    {{/section}} --}}
+    {{/section}}
   <body>
-    <h1>Create Course</h1>
-        <form class="form-area" action="/upload_course"  method="POST">
+    <h1>Update Lesson</h1>
+        <form class="form-area" action="/update_lesson?id={{lesson_id}}" method="POST">
             <div class="container">
-            <input style="margin-bottom: 10px;" name="title" type="text" placeholder="Title">
+            <input style="margin-bottom: 10px;" name="title" type="text" value="{{title}}">
+            <textarea id="field" name="postText" rows="20" cols="70">{{body}}</textarea>
             <br>
-            <textarea id="field" name="description" placeholder="Short description of your course" rows="20" cols="70"></textarea>
-            <br>
-            <input type="text" class="form-control" style="width:550px" name="availableFor" placeholder="Enter usernames allowed for this course separated by comma">
-            <br>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Update</button>
             </div>
         </form>
   </body>
-
+</html>

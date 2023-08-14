@@ -84,7 +84,8 @@ const CommentsSchema = new Schema({
         required: true
     },
     lessonId:{
-        type: mongoose.Types.ObjectId
+        type: mongoose.Types.ObjectId,
+        required:true
     }
 })
 

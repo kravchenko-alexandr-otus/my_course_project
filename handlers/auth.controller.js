@@ -15,7 +15,7 @@ export const signup = (req,res) => {
     user.save()
         .then((user)=> {
             console.log(user.username)
-            res.render('main')})
+            res.redirect('/?message=Successfully registered')})
         .catch((err)=> {
             console.log(err)})
 }
@@ -52,7 +52,7 @@ export const signin = (req,res) => {
             maxage: 86400*1000
         })
         res.cookie('username', user.username)
-        res.redirect(`/profile/${user.username}`)
+        res.redirect(`/`)
     }).catch(err => console.log(err))
 }
 

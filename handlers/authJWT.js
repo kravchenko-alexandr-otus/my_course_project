@@ -12,6 +12,8 @@ const verifyToken = (req, res, next) =>{
                     next()})
                 .catch(err=>console.log(err))
                 })
+    }else{
+        res.redirect('/?message=Please Sign In')
     }
 }
 
