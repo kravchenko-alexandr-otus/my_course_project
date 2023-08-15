@@ -58,7 +58,8 @@ export const courses = async(req, res) => {
 
 export const isAllowedToCourse = async (req, res, next) =>{
     const course = await Course.findById(req.params.id).lean()
-    if (course.allowedTo.includes(req.cookies.username)){
+    console.log(course.owner === req.cookies.username)
+    if (course.allowedTo.includes(req.cookies.username) || course.owner===req.cookies.username){
         next()
     } else{
         res.redirect('/courses?notAllowed=true')
