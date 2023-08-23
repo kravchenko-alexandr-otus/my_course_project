@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    {{#section 'head'}}
+    <style>
+        textarea{
+            font-size:20px;
+            font-family:'Montserrat Alternates';
+            border-radius:10px;outline:none;
+            transition: box-shadow .3s ease
+        }
+
+        textarea:-ms-input-placeholder {color: #fd7e14}
+        textarea::-moz-placeholder {color: #fd7e14}
+        textarea::-webkit-input-placeholder {color: #fd7e14}
+
+        textarea:focus{2px solid #fd7e14}
+        textarea:focus,
+        textarea:hover{box-shadow:0px 0px 13px 0px  #ffc107}
+                 
+        
+    </style>
+    {{/section}}
+  <body>
+    <h1>Create Lesson</h1>
+        <form class="form-area" action="/upload_data/{{course_id}}" enctype="multipart/form-data" method="POST">
+            <div class="container">
+            <input style="margin-bottom: 10px;" name="title" type="text" placeholder="Title">
+            <textarea id="field" name="postText" placeholder="Type Here" rows="20" cols="70"></textarea>
+            <br>
+            <label id="labelFor" class="btn btn-primary custom-file-upload" for="my-video">Upload Video</label>
+            <br>
+            <input type="file" name="my-video" accept="video/*" id="my-video" style="display:none">
+            <button type="submit btn btn-primary">Submit</button>
+            </div>
+        </form>
+  </body>
+
+{{#section 'scripts'}}
+<script>
+const fileInput = document.getElementById('my-video');
+
+const fileInputLabel = document.getElementById(
+  'labelFor',
+);
+
+fileInput.addEventListener('change', () => {
+  if (fileInput.value === '') {
+    fileInputLabel.innerHTML = 'Select a file';
+  } else {
+    const realPathArray = fileInput.value.split('\\');
+
+    fileInputLabel.innerHTML =
+      realPathArray[realPathArray.length - 1];
+  }
+});
+</script>
+{{/section}}
+</html>

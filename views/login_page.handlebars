@@ -1,0 +1,14 @@
+{{#section 'head'}}
+<link rel="stylesheet" href="css/signin.css">
+
+{{/section}}
+<form class="login" action="/signin" method="POST">
+  {{#if message}}
+    <b style="color: brown;">{{message}}</b>
+  {{/if}}
+  <input type="text" name="email" placeholder="email" id="username">  
+  <input type="password" name="password" placeholder="password" id="password">  
+  <input type="submit" value="Sign In">
+</form>
+<div class="shadow"></div>
+
