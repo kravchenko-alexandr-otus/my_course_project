@@ -78,12 +78,6 @@ app.post('/lesson', handlers.save_comment)
 
 app.post('/update_lesson', handlers.update_leson)
 
-// TODO: 
-// 1) Complete create_post.handlers
-// 2) render create_post.handlers
-// 3) Render all posts 
-// 4) Make little makeUp
-
 
 
 
