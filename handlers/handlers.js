@@ -1,7 +1,13 @@
-import {User, Lesson, Course, Comment} from '../models/models.js'
+import {Comment} from '../models/models.js'
 import { __dirname } from '../config.js'
 import path from 'path'
 import mongoose from 'mongoose'
+
+import { findLessonObjectById, findLessonDocumentById, findAllLessonsOfCourse, createLesson } from '../services/lesson.services.js'
+import { allCoursesObjects, createCourse, findCourseObjectById } from '../services/courses.services.js'
+import { createComment, findCommentsOfLesson } from '../services/comments.services.js'
+
+
 
 export const main = (req, res) => {
     if (req.query.message){
@@ -12,14 +18,13 @@ export const main = (req, res) => {
 export const registration = (req, res) => res.render('registration', {layout:'register.handlebars'})
 
 export const lesson = async (req, res) => {
-    const lesson = await Lesson.findOne({_id:req.query.id}).lean()
+    const lesson = await findLessonObjectById({_id:req.query.id})
     const id = req.query.id
     const title = lesson.title
     const body = lesson.body
     const videoPath = lesson.videoPath
-    const comments = await Comment.find({lessonId: req.query.id}).lean()
+    const comments = await findCommentsOfLesson(req.query.id)
     let owner = req.cookies.username ==lesson.owner
-    console.log(owner)
 
     res.render('lesson_page', { videoPath:videoPath, title:title, 
                 body:body, lesson_id:id, comments:comments, owner:owner})
@@ -27,15 +32,15 @@ export const lesson = async (req, res) => {
 
 export const update_lesson_page = async (req, res) => {
     const lesson_id = req.query.id
-    const lesson = await Lesson.findOne({_id: lesson_id}).lean()
+    const lesson = await findLessonObjectById({_id: lesson_id})
     const body = lesson.body
     const title = lesson.title
     res.render('update_lesson', {lesson_id:lesson_id, body:body, title:title})
 }
 
-export const update_leson = async (req, res) => {
+export const update_lesson = async (req, res) => {
     const id = req.query.id
-    const lesson = await Lesson.findById(id)
+    const lesson = await findLessonDocumentById(id)
     const body = req.body.postText
     const title = req.body.title
     console.log(body, title)
@@ -47,9 +52,9 @@ export const update_leson = async (req, res) => {
 }
 
 export const courses = async(req, res) => {
-    const courses = await Course.find({}).lean()
+    const courses = await allCoursesObjects()
     for (let course of courses){
-        course["lessons"] = await Lesson.find({accordingToCourse: course._id}).lean()
+        course["lessons"] = await findAllLessonsOfCourse({accordingToCourse:course._id})
     }
     if(req.query.notAllowed){
         return res.render('courses', {courses:courses, message: 'You are not allowed to this course'})
@@ -57,8 +62,8 @@ export const courses = async(req, res) => {
     res.render('courses', {courses:courses})}
 
 export const isAllowedToCourse = async (req, res, next) =>{
-    const course = await Course.findById(req.params.id).lean()
-    console.log(course.owner === req.cookies.username)
+    const course = await findCourseObjectById(req.params.id)
+    
     if (course.allowedTo.includes(req.cookies.username) || course.owner===req.cookies.username){
         next()
     } else{
@@ -76,14 +81,14 @@ export const create_course = (req, res) => res.render('create_course')
 
 export const course_lessons = async (req, res) =>{
     const id = req.params.id
-    const course_lessons = await Lesson.find({accordingToCourse:id}).lean()
+    const course_lessons = await findAllLessonsOfCourse({accordingToCourse:id})
     const owner = true
     res.render('lessons', {owner:owner, lessons:course_lessons, id:req.params.id})
 }
 
 export const upload_course = (req, res) => {
     const allowedTo = req.body.availableFor.split(',')
-    const course = new Course({
+    const course = createCourse({
         title: req.body.title,
         description: req.body.description,
         owner: req.cookies.username,
@@ -97,7 +102,7 @@ export const upload_course = (req, res) => {
 
 export const upload_data = (req, res) => {
     const courseId = req.params.id
-    const lesson = new Lesson({
+    const lesson = createLesson({
         title: req.body.title,
         body: req.body.postText,
         videoPath: path.join('uploads', req.file.filename),
@@ -112,7 +117,7 @@ export const upload_data = (req, res) => {
 
 export const save_comment = (req, res) => {
     const lessonId = req.query.id
-    const comment = new Comment({
+    const comment = createComment({
         username: req.cookies.username,
         body: req.body.commentText,
         lessonId: new mongoose.Types.ObjectId(lessonId)
@@ -124,15 +129,10 @@ export const save_comment = (req, res) => {
 
 export const logout = (req, res) => {
     res.cookie('access_token', '')
+    res.cookie('username', '')
     res.redirect('/')
 }
 
-export const profile = (req, res) => {
-    const username = req.params.username
-    const user = User.findOne({
-        username
-    })
-    res.render('profile', {layout:'profile'})
+export const errorHandler = (err, req, res, next) => {
+    res.render('error', {layout: 'error', status:err.status, message:err.message})
 }
-
-

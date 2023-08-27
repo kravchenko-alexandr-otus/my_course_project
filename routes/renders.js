@@ -3,6 +3,7 @@ import * as handlers from '../handlers/handlers.js'
 import verifyToken from '../handlers/authJWT.js'
 const router = express.Router()
 
+// All handlers with get method
 router.get('/', handlers.main)
 
 router.get('/registration', handlers.registration)
@@ -18,5 +19,9 @@ router.get('/create_lesson/:id', handlers.create_lesson)
 router.get('/lesson', handlers.lesson)
 
 router.get('/update_lesson', handlers.update_lesson_page)
+
+router.get('/signIn', handlers.login)
+
+router.get('/logout', handlers.logout)
 
 export default router

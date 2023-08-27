@@ -2,6 +2,7 @@ import mongoose, { Mongoose } from "mongoose"
 
 const Schema = mongoose.Schema
 
+// User Documents schema in mongoDB
 const userSchema = new Schema({
     username:{
         type: String,
@@ -38,6 +39,7 @@ const userSchema = new Schema({
     }
 })
 
+// Lesson Documents schema in mongoDB
 const LessonSchema = new Schema({
     title:{
         type: String,
@@ -70,6 +72,7 @@ const LessonSchema = new Schema({
     }
 })
 
+// Comment Documents schema in mongoDB
 const CommentsSchema = new Schema({
     username:{
         type: String,
@@ -89,6 +92,7 @@ const CommentsSchema = new Schema({
     }
 })
 
+// Course Documents schema in mongoDB
 const CourseSchema = new Schema({
     title: {
         type: String,
